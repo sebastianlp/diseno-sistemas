@@ -18,7 +18,7 @@
 ## El admin
 1. Ingresar a `http://0.0.0.0:5000/admin
 2. Logearse usando las credenciales
-	```
-  user: admin
-  password: admin321
-  ```
+```
+user: admin
+password: admin321
+```
