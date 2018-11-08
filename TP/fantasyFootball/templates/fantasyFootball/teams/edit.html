@@ -1,0 +1,103 @@
+{% extends 'fantasyFootball/teams/base.html' %}
+
+{% block data_content %}
+  <section>
+    <div class="row">
+      <div class="col-sm">
+        <div class="card bg-light">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                    <a class="btn btn-primary" href="/admin/fantasyFootball/player/add/" role="button">Crear nuevo jugador</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <h3>Jugadores del club</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Posicion</th>
+                        <th scope="col">Quitar de {{ team.team_name }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for player in team.players.all %}
+                        <tr>
+                          <td>{{ player.id }}</td>
+                          <td>{{ player.player_name }}</td>
+                          <td>{{ player.player_surname }}</td>
+                          <td></td>
+                          <td>
+                            <form method="POST" action="{% url 'delete-player-from-team' %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="team_id" value="{{ team.id }}">
+                              <input type="hidden" name="player_id" value="{{ player.id }}">
+                              <input class="btn btn-danger btn-sm" type="submit" value="Quitar">
+                            </form>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-light">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <h3>Jugadores sin club</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Posicion</th>
+                        <th scope="col">Agregar a {{ team.team_name }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for player in players %}
+                        <tr>
+                          <td>{{ player.id }}</td>
+                          <td>{{ player.player_name }}</td>
+                          <td>{{ player.player_surname }}</td>
+                          <td></td>
+                          <td>
+                            <form method="POST">
+                              {% csrf_token %}
+                              <input type="hidden" name="team_id" value="{{ team.id }}">
+                              <input type="hidden" name="player_id" value="{{ player.id }}">
+                              <input class="btn btn-primary btn-sm" type="submit" value="Agregar">
+                            </form>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

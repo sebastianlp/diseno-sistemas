@@ -1,0 +1,17 @@
+{% extends 'fantasyFootball/base.html' %}
+
+{% block content %}
+  <section class="clubs h-100 list container-fluid">
+    <div class="row">
+      <div class="col-sm">
+        <h3 class="text-center">Clubes</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        {% block data_content %}
+        {% endblock data_content %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

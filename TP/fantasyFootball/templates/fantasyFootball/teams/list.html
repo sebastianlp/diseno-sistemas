@@ -1,0 +1,120 @@
+{% extends 'fantasyFootball/teams/base.html' %}
+
+{% block data_content %}
+  <section>
+    <div class="row">
+      <div class="col-sm">
+        <div class="card bg-light">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  {% if user.is_superuser %}
+                    <a class="btn btn-primary" href="/admin/fantasyFootball/team/add/" role="button">Crear nuevo equipo</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <hr>
+            {% if object_list %}
+              {% for team in object_list %}
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-10">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm">
+                            <h4>{{ team.team_name }}</h4>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm">
+                            <p>{{ team.description }}</p>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-sm">
+                            {% if user.is_superuser %}
+                              <a class="btn btn-secondary" href="{% url 'team-edit' team.id %}" role="button">Editar</a>
+                            {% else %}
+                              {% for mt in user.user_profile.manage_teams.all %}
+                                {% if mt.id == team.id %}
+                                  <a class="btn btn-secondary" href="{% url 'team-edit' team.id %}" role="button">Editar</a>
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        {% if team.stadiums.exists > 0 %}
+                          <div class="row mb-2">
+                            <div class="col-sm">
+                              <button 
+                                class="btn btn-primary" 
+                                type="button" 
+                                data-toggle="collapse" 
+                                data-target="#collapseStadium-{{team.id}}" 
+                                aria-expanded="false" 
+                                aria-controls="collapseStadium-{{team.id}}"
+                              >
+                                Ver estadio
+                              </button>
+                            </div>
+                          </div>
+                        {% else %}
+                          {% if user.is_superuser %}
+                            <a class="btn btn-secondary" href="/admin/fantasyFootball/stadium/add" role="button">Crear estadio</a>
+                          {% else %}
+                            {% for mt in user.user_profile.manage_teams.all %}
+                              <a class="btn btn-secondary" href="/admin/fantasyFootball/stadium/add" role="button">Crear estadio</a>
+                            {% endfor %}
+                          {% endif %}
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-sm">
+                            <div class="collapse" id="collapseStadium-{{team.id}}">
+                              {% for stadium in team.stadiums.all %}
+                                <div class="card card-body mb-3">
+                                  <div class="container">
+                                    <div class="row">
+                                      <div class="col-sm-10">
+                                        <div class="container">
+                                          <div class="row">
+                                            <div class="col-sm">
+                                                <h3>{{ stadium.stadium_name }}</h3>
+                                            </div>
+                                          </div>
+                                          <div class="row">
+                                            <div class="col-sm">
+                                              <p>{{ stadium.description }}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-sm-2 text-center">
+                                        <img class="img-thumbnail" src="/media/{{ stadium.stadium_image }}" alt="{{ stadium.stadium_name }}">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-2 text-center">
+                      <img class="img-thumbnail team--logo" src="/media/{{ team.team_logo }}" alt="{{ team.team_name }}">
+                    </div>
+                  </div>
+                </div>
+                <hr />
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+
